@@ -7,7 +7,7 @@ class CoderAgent:
         self.stream_output = stream_output
         self.headers = headers or {}
         
-        self.interpreter = 
+        self.interpreter = interpreter.Interpreter()
 
     async def generate_data_visuals(self, research_state: dict):
         """
