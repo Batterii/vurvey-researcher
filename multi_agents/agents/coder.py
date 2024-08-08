@@ -55,3 +55,35 @@ class CoderAgent:
     async def run(self, research_state: dict):
         graphs = await self.generate_data_visuals(research_state)
         return {"graphs": graphs}
+import os
+from .utils.views import print_agent_output
+
+class CoderAgent:
+    def __init__(self, code_dir, websocket=None, stream_output=None, headers=None):
+        self.code_dir = code_dir
+        self.websocket = websocket
+        self.stream_output = stream_output
+        self.headers = headers or {}
+
+    async def run(self, state):
+        if self.websocket and self.stream_output:
+            await self.stream_output("logs", "coder_start", "Starting code generation...", self.websocket)
+        else:
+            print_agent_output("Starting code generation...", "CODER")
+
+        # Here you would implement the logic for code generation
+        # For now, we'll just create a placeholder file
+        placeholder_code = "# This is a placeholder for generated code\n\ndef main():\n    print('Hello from the Coder Agent!')\n\nif __name__ == '__main__':\n    main()"
+        
+        file_path = os.path.join(self.code_dir, "generated_code.py")
+        with open(file_path, "w") as f:
+            f.write(placeholder_code)
+
+        if self.websocket and self.stream_output:
+            await self.stream_output("logs", "coder_complete", f"Code generation complete. File saved at {file_path}", self.websocket)
+        else:
+            print_agent_output(f"Code generation complete. File saved at {file_path}", "CODER")
+
+        # Update the state with the path to the generated code
+        state.generated_code_path = file_path
+        return state
