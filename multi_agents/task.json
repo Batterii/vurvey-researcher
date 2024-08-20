@@ -1,18 +1,18 @@
 {
-  "query": "Is AI in a hype cycle?",
-  "max_sections": 3,
+  "query": "A Comprehensive Review of Multimodal Large Language Models. Benchmarking, Evaluation, techniques, pitfalls, advantages, disadvantages, and Future Directions, etc.",
+  "max_sections": 10,
   "publish_formats": {
     "markdown": true,
     "pdf": true,
     "docx": true
   },
-  "include_human_feedback": true,
-  "follow_guidelines": false,
+  "include_human_feedback": false,
+  "follow_guidelines": true,
   "model": "gpt-4o",
   "guidelines": [
-    "The report MUST be written in APA format",
     "Each sub section MUST include supporting sources using hyperlinks. If none exist, erase the sub section or rewrite it to be a part of the previous section",
-    "The report MUST be written in spanish"
+    "Make sure information is accurate and up-to-date",
+    "Make sure the information is detailed and comprehensive"
   ],
   "verbose": true
 }

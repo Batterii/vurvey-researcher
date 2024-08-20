@@ -9,6 +9,9 @@ class ResearchState(TypedDict):
     research_data: List[dict]
     human_feedback: str
     # Report layout
+    data_analysis: dict
+    visualizations: List[str]
+    data_insights: str
     title: str
     headers: dict
     date: str
@@ -17,5 +20,3 @@ class ResearchState(TypedDict):
     conclusion: str
     sources: List[str]
     report: str
-
-

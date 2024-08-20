@@ -1,5 +1,6 @@
 from .researcher import ResearchAgent
 from .writer import WriterAgent
+from .data_analyst import DataAnalystAgent
 from .publisher import PublisherAgent
 from .reviser import ReviserAgent
 from .reviewer import ReviewerAgent
@@ -17,5 +18,6 @@ __all__ = [
     "PublisherAgent",
     "ReviserAgent",
     "ReviewerAgent",
-    "HumanAgent"
+    "HumanAgent",
+    "DataAnalystAgent"
 ]

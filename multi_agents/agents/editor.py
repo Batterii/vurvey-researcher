@@ -5,7 +5,7 @@ from langgraph.graph import StateGraph, END
 import asyncio
 import json
 
-from ..memory.draft import DraftState
+from multi_agents.memory.draft import DraftState
 from . import \
     ResearchAgent, \
     ReviewerAgent, \
@@ -47,6 +47,7 @@ class EditorAgent:
                        f" based on the research summary report above.\n"
                        f"You must generate a maximum of {max_sections} section headers.\n"
                        f"You must focus ONLY on related research topics for subheaders and do NOT include introduction, conclusion and references.\n"
+                       f"You must MAKE SURE THAT THE SECTIONS DO NOT OVERLAP AND CONTAIN UNIQUE CONTENT SPECIFIC TO THAT SECTION.\n"
                        f"You must return nothing but a JSON with the fields 'title' (str) and "
                        f"'sections' (maximum {max_sections} section headers) with the following structure: "
                        f"'{{title: string research title, date: today's date, "

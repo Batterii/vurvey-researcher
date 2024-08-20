@@ -69,6 +69,22 @@ export default function Answer({ answer }: { answer: string }) {
             {answer ? (
               <div className="answer-container">
                 <div className="markdown-content" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+               {answer.visualizations && answer.visualizations.length > 0 && (
+                 <div className="visualizations-container">
+                   <h3>Data Visualizations</h3>
+                   {answer.visualizations.map((visualization, index) => (
+                     <div key={index} className="visualization">
+                       <img src={visualization} alt={`Data visualization ${index + 1}`} />
+                     </div>
+                   ))}
+                 </div>
+               )}
+               {answer.data_insights && (
+                 <div className="data-insights">
+                   <h3>Data Insights</h3>
+                   <p>{answer.data_insights}</p>
+                 </div>
+               )}
                 <style jsx>{`
                 .answer-container {
                     font-family: Georgia, 'Times New Roman', Times, serif;

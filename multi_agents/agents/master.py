@@ -14,8 +14,7 @@ from . import \
     EditorAgent, \
     PublisherAgent, \
     ResearchAgent, \
-    HumanAgent, \
-    CoderAgent
+    HumanAgent
 
 
 class ChiefEditorAgent:
@@ -28,8 +27,6 @@ class ChiefEditorAgent:
         self.headers = headers or {}
         self.tone = tone
         os.makedirs(self.output_dir, exist_ok=True)
-        self.code_dir = os.path.join(self.output_dir, "code")
-        os.makedirs(self.code_dir, exist_ok=True)
 
     def init_research_team(self):
         # Initialize agents
@@ -38,7 +35,6 @@ class ChiefEditorAgent:
         research_agent = ResearchAgent(self.websocket, self.stream_output, self.tone, self.headers)
         publisher_agent = PublisherAgent(self.output_dir, self.websocket, self.stream_output, self.headers)
         human_agent = HumanAgent(self.websocket, self.stream_output, self.headers)
-        coder_agent = CoderAgent(self.code_dir, self.websocket, self.stream_output, self.headers)
 
         # Define a Langchain StateGraph with the ResearchState
         workflow = StateGraph(ResearchState)
@@ -48,15 +44,13 @@ class ChiefEditorAgent:
         workflow.add_node("planner", editor_agent.plan_research)
         workflow.add_node("researcher", editor_agent.run_parallel_research)
         workflow.add_node("writer", writer_agent.run)
-        workflow.add_node("coder", coder_agent.run)
         workflow.add_node("publisher", publisher_agent.run)
         workflow.add_node("human", human_agent.review_plan)
 
         workflow.add_edge('browser', 'planner')
         workflow.add_edge('planner', 'human')
         workflow.add_edge('researcher', 'writer')
-        workflow.add_edge('writer', 'coder')
-        workflow.add_edge('coder', 'publisher')
+        workflow.add_edge('writer', 'publisher')
 
         # set up start and end nodes
         workflow.set_entry_point("browser")

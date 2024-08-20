@@ -2,7 +2,7 @@ import aiofiles
 import urllib
 import uuid
 import mistune
-
+import os
 
 async def write_to_file(filename: str, text: str) -> None:
     """Asynchronously write text to a file in UTF-8 encoding.
@@ -13,6 +13,9 @@ async def write_to_file(filename: str, text: str) -> None:
     """
     # Convert text to UTF-8, replacing any problematic characters
     text_utf8 = text.encode('utf-8', errors='replace').decode('utf-8')
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     async with aiofiles.open(filename, "w", encoding='utf-8') as file:
         await file.write(text_utf8)
@@ -49,14 +52,16 @@ async def write_md_to_pdf(text: str, path: str) -> str:
     try:
         # Moved imports to inner function to avoid known import errors with gobject-2.0
         from md2pdf.core import md2pdf
+        print(f"Attempting to create PDF at: {os.path.abspath(file_path)}")
+        print(f"CSS file path: {os.path.abspath('./agents/utils/pdf_styles.css')}")
         md2pdf(file_path,
                md_content=text,
-               # md_file_path=f"{file_path}.md",
-               css_file_path="./multi_agents/agents/utils/pdf_styles.css",  # Updated path
+               css_file_path="./agents/utils/pdf_styles.css",
                base_url=None)
-        print(f"Report written to {file_path}")
+        print(f"Report successfully written to {file_path}")
     except Exception as e:
         print(f"Error in converting Markdown to PDF: {e}")
+        print(f"Current working directory: {os.getcwd()}")
         return ""
 
     encoded_file_path = urllib.parse.quote(file_path)
@@ -85,14 +90,19 @@ async def write_md_to_word(text: str, path: str) -> str:
         # Convert the html generated from the report to document format
         HtmlToDocx().add_html_to_document(html, doc)
 
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        print(f"Attempting to create DOCX at: {os.path.abspath(file_path)}")
         # Saving the docx document to file_path
         doc.save(file_path)
 
-        print(f"Report written to {file_path}")
+        print(f"Report successfully written to {file_path}")
 
-        encoded_file_path = urllib.parse.quote(f"{file_path}.docx")
+        encoded_file_path = urllib.parse.quote(file_path)
         return encoded_file_path
 
     except Exception as e:
         print(f"Error in converting Markdown to DOCX: {e}")
+        print(f"Current working directory: {os.getcwd()}")
         return ""
